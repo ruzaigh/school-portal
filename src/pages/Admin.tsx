@@ -1,6 +1,7 @@
 import { Calendar, Edit, FileText, Settings, Trash2, UserPlus, Plus } from 'lucide-react'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
+import UserManagement from '../components/UserManagement'
 import type { EventItem, ResultItem, SchoolData, StudentItem } from '../types/school'
 
 interface AdminProps {
@@ -37,6 +38,9 @@ export default function Admin({ data, isAdmin, toggleAdmin, onAddStudent, onAddG
         </div>
       ) : (
         <div className="space-y-6">
+          {/* User Management Section */}
+          <UserManagement />
+          
           <Card>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Students Management</h2>

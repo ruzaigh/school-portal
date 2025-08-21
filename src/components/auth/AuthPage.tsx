@@ -1,15 +1,11 @@
 import { useState } from 'react'
 import { GraduationCap } from 'lucide-react'
 import LoginForm from './LoginForm'
-import SignupForm from './SignupForm'
 import Card from '../ui/Card'
 import Alert from '../ui/Alert'
-import { useAuth } from '../../contexts/AuthContext'
-
-type AuthMode = 'login' | 'signup'
+import { useAuth } from '../../hooks/useAuth'
 
 export default function AuthPage() {
-  const [authMode, setAuthMode] = useState<AuthMode>('login')
   const [resetMessage, setResetMessage] = useState<string | null>(null)
   const { resetPassword } = useAuth()
 
@@ -34,10 +30,7 @@ export default function AuthPage() {
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">School Portal</h1>
           <p className="text-gray-600">
-            {authMode === 'login' 
-              ? 'Welcome back! Sign in to your account' 
-              : 'Create your account to get started'
-            }
+            Welcome back! Sign in to your account
           </p>
         </div>
 
@@ -54,41 +47,7 @@ export default function AuthPage() {
 
         {/* Auth Form */}
         <Card className="p-6">
-          <div className="mb-6">
-            <div className="flex bg-gray-100 rounded-lg p-1">
-              <button
-                onClick={() => setAuthMode('login')}
-                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                  authMode === 'login'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => setAuthMode('signup')}
-                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                  authMode === 'signup'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                Sign Up
-              </button>
-            </div>
-          </div>
-
-          {authMode === 'login' ? (
-            <LoginForm
-              onSwitchToSignup={() => setAuthMode('signup')}
-              onForgotPassword={handleForgotPassword}
-            />
-          ) : (
-            <SignupForm
-              onSwitchToLogin={() => setAuthMode('login')}
-            />
-          )}
+          <LoginForm onForgotPassword={handleForgotPassword} />
         </Card>
 
         {/* Footer */}

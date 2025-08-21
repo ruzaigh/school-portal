@@ -1,9 +1,7 @@
 import {
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
-  updateProfile,
   sendEmailVerification
 } from 'firebase/auth'
 import type { User as FirebaseUser } from 'firebase/auth'
@@ -21,24 +19,6 @@ export const authService = {
     }
   },
 
-  async signup(email: string, password: string, displayName: string): Promise<User> {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-      
-      await updateProfile(userCredential.user, {
-        displayName
-      })
-      
-      await sendEmailVerification(userCredential.user)
-      
-      return convertFirebaseUser({
-        ...userCredential.user,
-        displayName
-      } as FirebaseUser)
-    } catch (error) {
-      throw new Error(getAuthErrorMessage((error as { code: string }).code))
-    }
-  },
 
   async logout(): Promise<void> {
     try {

@@ -6,11 +6,12 @@ Welcome to the School Portal project! This guide will help you get up and runnin
 
 1. [Quick Start Guide](#quick-start-guide)
 2. [Project Architecture](#project-architecture)
-3. [Development Workflow](#development-workflow)
-4. [Component Reference](#component-reference)
-5. [Domain Knowledge](#domain-knowledge)
-6. [Common Development Tasks](#common-development-tasks)
-7. [Troubleshooting](#troubleshooting)
+3. [Authentication & User Management](#authentication--user-management)
+4. [Development Workflow](#development-workflow)
+5. [Component Reference](#component-reference)
+6. [Domain Knowledge](#domain-knowledge)
+7. [Common Development Tasks](#common-development-tasks)
+8. [Troubleshooting](#troubleshooting)
 
 ## Quick Start Guide
 
@@ -34,16 +35,29 @@ Welcome to the School Portal project! This guide will help you get up and runnin
    npm install
    ```
 
-3. **Start development server**:
+3. **Configure environment variables**:
+   ```bash
+   cp .env.local.example .env.local
+   # Edit .env.local with your Firebase configuration
+   ```
+
+4. **Set up Firebase Authentication and Firestore**:
+   - Create a Firebase project at https://console.firebase.google.com
+   - Enable Authentication (Email/Password provider)
+   - Enable Firestore database
+   - Copy configuration values to `.env.local`
+
+5. **Start development server**:
    ```bash
    npm run dev
    ```
    The application will be available at `http://localhost:5173` with hot reload enabled.
 
-4. **Verify setup**:
-   - Open the application in your browser
-   - You should see the School Portal dashboard
-   - Try switching between tabs (Dashboard, Results, Materials, Admin)
+6. **Initial Setup**:
+   - Register your first user account through the login page
+   - Complete the role setup process (select ADMIN for full access)
+   - If you're the first user, you'll automatically become an admin
+   - Access the Admin tab to manage other users
 
 ### Available Scripts
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { LogIn, Eye, EyeOff } from 'lucide-react'
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import type { LoginFormData } from '../../types/auth'
 import Button from '../ui/Button'
 import Input from '../ui/Input'
@@ -8,11 +8,10 @@ import LoadingSpinner from '../ui/LoadingSpinner'
 import Alert from '../ui/Alert'
 
 interface LoginFormProps {
-  onSwitchToSignup: () => void
   onForgotPassword: (email: string) => void
 }
 
-export default function LoginForm({ onSwitchToSignup, onForgotPassword }: LoginFormProps) {
+export default function LoginForm({ onForgotPassword }: LoginFormProps) {
   const { login, loading, error, clearError } = useAuth()
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
@@ -137,7 +136,7 @@ export default function LoginForm({ onSwitchToSignup, onForgotPassword }: LoginF
         )}
       </Button>
 
-      <div className="text-center space-y-3">
+      <div className="text-center">
         <button
           type="button"
           onClick={handleForgotPassword}
@@ -146,18 +145,6 @@ export default function LoginForm({ onSwitchToSignup, onForgotPassword }: LoginF
         >
           Forgot your password?
         </button>
-        
-        <div className="text-sm text-gray-600">
-          Don't have an account?{' '}
-          <button
-            type="button"
-            onClick={onSwitchToSignup}
-            className="text-blue-600 hover:text-blue-800 font-medium"
-            disabled={isSubmitting || loading}
-          >
-            Sign up
-          </button>
-        </div>
       </div>
     </form>
   )

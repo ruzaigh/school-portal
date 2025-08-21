@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Users, Save, BarChart3, BookOpen, Download, Settings, LogOut, User } from 'lucide-react'
-import { useAuth } from './contexts/AuthContext'
+import { useAuth } from './hooks/useAuth'
 
 import Dashboard from './pages/Dashboard'
 import Results from './pages/Results'
@@ -90,6 +90,13 @@ const SchoolApp = () => {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  // Redirect non-admin users away from admin tab
+  useEffect(() => {
+    if (activeTab === 'admin' && user?.role !== 'ADMIN') {
+      setActiveTab('home')
+    }
+  }, [activeTab, user?.role])
 
   // Modal states
   const [showEventModal, setShowEventModal] = useState<boolean>(false)
@@ -229,27 +236,35 @@ const SchoolApp = () => {
     setData((prev) => ({ ...prev, materials: { ...prev.materials, [grade]: (prev.materials[grade] || []).filter((m) => m.id !== id) } }))
 
   // Navigation
-  const Navigation = () => (
-    <div className="bg-white border-t border-gray-200 px-4 py-2">
-      <div className="flex justify-around">
-        {([
-          { id: 'home', label: 'Dashboard', icon: BarChart3 },
-          { id: 'results', label: 'Results', icon: BookOpen },
-          { id: 'materials', label: 'Materials', icon: Download },
-          { id: 'admin', label: 'Admin', icon: Settings },
-        ] as Array<{ id: TabId; label: string; icon: typeof BarChart3 }>).map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            onClick={() => setActiveTab(id)}
-            className={`flex flex-col items-center py-2 px-3 rounded-lg ${activeTab === id ? 'text-blue-600 bg-blue-50' : 'text-gray-600'}`}
-          >
-            <Icon size={22} />
-            <span className="text-xs mt-1">{label}</span>
-          </button>
-        ))}
+  const Navigation = () => {
+    const tabs = [
+      { id: 'home', label: 'Dashboard', icon: BarChart3 },
+      { id: 'results', label: 'Results', icon: BookOpen },
+      { id: 'materials', label: 'Materials', icon: Download },
+    ] as Array<{ id: TabId; label: string; icon: typeof BarChart3 }>
+
+    // Only show admin tab for ADMIN users
+    if (user?.role === 'ADMIN') {
+      tabs.push({ id: 'admin', label: 'Admin', icon: Settings })
+    }
+
+    return (
+      <div className="bg-white border-t border-gray-200 px-4 py-2">
+        <div className="flex justify-around">
+          {tabs.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={`flex flex-col items-center py-2 px-3 rounded-lg ${activeTab === id ? 'text-blue-600 bg-blue-50' : 'text-gray-600'}`}
+            >
+              <Icon size={22} />
+              <span className="text-xs mt-1">{label}</span>
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   const handleLogout = async () => {
     try {
@@ -341,7 +356,7 @@ const SchoolApp = () => {
             grades={GRADES}
           />
         )}
-        {activeTab === 'admin' && (
+        {activeTab === 'admin' && user?.role === 'ADMIN' && (
           <Admin
             data={data}
             isAdmin={isAdmin}
@@ -358,6 +373,17 @@ const SchoolApp = () => {
             handleDeleteEvent={handleDeleteEvent}
             handleDeleteMaterial={handleDeleteMaterial}
           />
+        )}
+        {activeTab === 'admin' && user?.role !== 'ADMIN' && (
+          <div className="p-4 text-center">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+              <div className="text-red-600 mb-2">
+                <Settings size={48} className="mx-auto mb-4" />
+              </div>
+              <h3 className="text-lg font-semibold text-red-800 mb-2">Access Denied</h3>
+              <p className="text-red-600">You do not have permission to access the admin panel. Only administrators can view this section.</p>
+            </div>
+          </div>
         )}
       </div>
 

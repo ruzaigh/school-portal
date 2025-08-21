@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 import AuthPage from './AuthPage'
+import UserSetup from './UserSetup'
 import LoadingSpinner from '../ui/LoadingSpinner'
 
 interface ProtectedRouteProps {
@@ -8,7 +9,7 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { user, loading } = useAuth()
+  const { user, loading, needsSetup } = useAuth()
 
   if (loading) {
     return (
@@ -23,6 +24,10 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   if (!user) {
     return <AuthPage />
+  }
+
+  if (needsSetup) {
+    return <UserSetup />
   }
 
   return <>{children}</>
