@@ -552,8 +552,10 @@ const SchoolApp = () => {
                     <button
                         key={id}
                         onClick={() => setActiveTab(id)}
-                        className={`flex flex-col items-center py-2 px-3 rounded-lg ${
-                            activeTab === id ? 'text-blue-600 bg-blue-50' : 'text-gray-600'
+                        className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
+                            activeTab === id
+                                ? 'text-blue-600 bg-blue-50'
+                                : 'text-gray-600'
                         }`}
                     >
                         <Icon size={24} />
@@ -563,6 +565,7 @@ const SchoolApp = () => {
             </div>
         </div>
     );
+
 
     // Dashboard/Landing Page
     const Dashboard = () => (
@@ -588,7 +591,7 @@ const SchoolApp = () => {
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                         <Calendar className="text-blue-600" size={24} />
-                        <h2 className="text-xl font-semibold">Upcoming Events</h2>
+                        <h2 className="text-xl font-semibold text-black">Upcoming Events</h2>
                     </div>
                     {isAdmin && (
                         <Button variant="outline" size="sm" onClick={() => setShowEventModal(true)}>
@@ -601,7 +604,7 @@ const SchoolApp = () => {
                     {data.events.map(event => (
                         <div key={event.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                             <div className="flex-1">
-                                <h4 className="font-medium">{event.title}</h4>
+                                <h4 className="font-medium text-black">{event.title}</h4>
                                 <p className="text-sm text-gray-600">{event.date}</p>
                                 <p className="text-xs text-gray-500">{event.description}</p>
                             </div>
@@ -639,12 +642,12 @@ const SchoolApp = () => {
             <Card>
                 <div className="flex items-center gap-2 mb-4">
                     <BarChart3 className="text-green-600" size={24} />
-                    <h2 className="text-xl font-semibold">Grade Performance</h2>
+                    <h2 className="text-xl font-semibold text-black">Grade Performance</h2>
                 </div>
                 <div className="space-y-3">
                     {calculateGradeAverages().map(({ grade, average }) => (
                         <div key={grade} className="flex items-center justify-between">
-                            <span className="font-medium">{grade}</span>
+                            <span className="font-medium text-black">{grade}</span>
                             <div className="flex items-center gap-3">
                                 <div className="w-32 bg-gray-200 rounded-full h-2">
                                     <div
@@ -655,7 +658,7 @@ const SchoolApp = () => {
                                         style={{ width: `${average}%` }}
                                     />
                                 </div>
-                                <span className="text-lg font-bold min-w-[3rem] text-right">{average}%</span>
+                                <span className="text-lg font-bold min-w-[3rem] text-right text-black">{average}%</span>
                             </div>
                         </div>
                     ))}
